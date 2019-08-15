@@ -1,16 +1,5 @@
-# dream_diary
+# Dream Diary
 
-A new Flutter project.
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/95b360c4b17a4e05ab7532f03ace0124)](https://app.codacy.com/app/sanjay29/dream-diary?utm_source=github.com&utm_medium=referral&utm_content=FN2187fo/dream-diary&utm_campaign=Badge_Grade_Settings)
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+An app to store your dreams locally, a method known for helping with lucid dreaming.
