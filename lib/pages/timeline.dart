@@ -45,8 +45,8 @@ class _TimelineState extends State<Timeline> {
          itemBuilder: (context, index) {
           return Card(
             child: ListTile(
-              title: Text(fileContent.values.elementAt(index)), 
-              subtitle: Text(fileContent.keys.elementAt(index).split(" ").elementAt(0)),
+              title: Text(fileContent.values.elementAt(fileContent.length.toInt() - index.toInt() - 1)), 
+              subtitle: Text(fileContent.keys.elementAt(fileContent.length.toInt() - index.toInt() - 1).split(" ").elementAt(0)),
             ),
           );
          },
