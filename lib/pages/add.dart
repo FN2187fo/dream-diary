@@ -62,12 +62,18 @@ class _AddState extends State<Add> {
       ),
       body: ListView(
         children: <Widget>[
-          TextFormField(
-          decoration: InputDecoration(
-            hintText: "What did you dream about?",
-          ),
-          maxLength: 50,
-          controller: _titleController,
+          Card(
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: "What did you dream about?",
+              ),
+              controller: _titleController,
+              keyboardType: TextInputType.multiline,
+              minLines: 10,
+              maxLines: 50,
+            ),
+            margin: EdgeInsets.all(20),
+            elevation: 6,
           )
         ],
       ),
