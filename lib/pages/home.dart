@@ -1,3 +1,4 @@
+import 'package:dream_diary/pages/timeline.dart';
 import 'package:flutter/material.dart';
 import 'add.dart';
 import 'package:path_provider/path_provider.dart';
@@ -34,6 +35,14 @@ class _HomeState extends State<Home> {
     print(fileContent);
   }
 
+  _getItemCount(){
+    if(fileContent.values.length > 5) {
+      return 6;
+    } else {
+      return fileContent.values.length + 1;
+    }
+  }
+
    @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -41,31 +50,47 @@ class _HomeState extends State<Home> {
         centerTitle: true,
         title: Text("Home"),
       ),
-      body:ListView(
-        children: <Widget>[
-          Card(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListView.builder(
-                  itemCount: fileContent.values.length,
-                  itemBuilder: (context, index) {
-                  return ListTile(
-                      title: Text(fileContent.values.elementAt(index)), 
-                      subtitle: Text(fileContent.keys.elementAt(index).split(" ").elementAt(0)),
-                    );
-                  },
+      body: Container(
+        height: 155,
+        padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: _getItemCount(),
+          itemBuilder: (context, index) {
+            if(index == 5 || index > fileContent.keys.length) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => Timeline()));
+                },
+                child: Container(
+                  width: 150,
+                  child: Card(
+                    color: Theme.of(context).accentColor,
+                    child: Center(
+                      child: Text("Show all", style: TextStyle(color: Colors.white),),
+                    ),
+                  ),
                 ),
-              ],
-            )
-          )
-        ],
+              );
+            } else {
+              return Container(
+                width: 200,
+                child: Card(
+                  child: ListTile(
+                    title: Text(fileContent.values.elementAt(fileContent.length.toInt() - index.toInt() - 1)), 
+                    subtitle: Text(fileContent.keys.elementAt(fileContent.length.toInt() - index.toInt() - 1).split(" ").elementAt(0)),
+                  ),
+                ),
+              );
+            }
+          },
+        ),
       ),
-       floatingActionButton: FloatingActionButton(
-         onPressed: () {
-           Navigator.push(context, MaterialPageRoute(builder: (context) => Add()));
-         },
-         child: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) => Add()));
+        },
+          child: Icon(Icons.add),
        ),
      );
    }
