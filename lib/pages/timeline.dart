@@ -45,52 +45,56 @@ class _TimelineState extends State<Timeline> {
     });
   }
 
-   @override
-   Widget build(BuildContext context) {
-     return new Scaffold(
-       appBar: AppBar(
-         centerTitle: true,
-         title: Text("Timeline"),
-       ),
-       body: ListView.builder(
-         itemCount: fileContent.values.length,
-         itemBuilder: (context, index) {
-          int _index = fileContent.length.toInt() - index.toInt() - 1;
-          return Dismissible(
-            key: Key(fileContent.keys.elementAt(_index)),
-            onDismissed: (direction) {
-              Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
-              jsonFileContent.remove(fileContent.keys.elementAt(_index));
-              jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
-              setState(() {
-                fileContent = jsonDecode(jsonFile.readAsStringSync());
-              });
-              Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
-            },
-            child: GestureDetector(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context, 
-                  builder: (BuildContext context) {
-                    return Text(
-                      fileContent.values.elementAt(_index),
-                      textAlign: TextAlign.center,
-                      textScaleFactor: 1.5,
-                    );
-                  }
-                );
-              },
-              child: Card(
-                child: ListTile(
-                  title: Text(fileContent.values.elementAt(_index)), 
-                  subtitle: Text(fileContent.keys.elementAt(_index).split(" ").elementAt(0)),
-                ),
-              ),
-            )
-          );
-         },
-       ),
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Timeline"),
+      ),
+      body: ListView.builder(
+        itemCount: fileContent.values.length,
+        itemBuilder: (context, index) {
+        return _getList(index);
+        },
+      ),
 
-     );
-   }
+    );
+  }
+  
+  _getList(index) {
+    int _index = fileContent.length.toInt() - index.toInt() - 1;
+    return Dismissible(
+      key: Key(fileContent.keys.elementAt(_index)),
+      onDismissed: (direction) {
+        Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
+        jsonFileContent.remove(fileContent.keys.elementAt(_index));
+        jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
+        setState(() {
+          fileContent = jsonDecode(jsonFile.readAsStringSync());
+        });
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
+      },
+      child: GestureDetector(
+        onTap: () {
+          showModalBottomSheet(
+            context: context, 
+            builder: (BuildContext context) {
+              return Text(
+                fileContent.values.elementAt(_index),
+                textAlign: TextAlign.center,
+                textScaleFactor: 1.5,
+              );
+            }
+          );
+        },
+        child: Card(
+          child: ListTile(
+            title: Text(fileContent.values.elementAt(_index)), 
+            subtitle: Text(fileContent.keys.elementAt(_index).split(" ").elementAt(0)),
+          ),
+        ),
+      )
+    ); 
+  }
 }
