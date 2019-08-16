@@ -67,12 +67,26 @@ class _TimelineState extends State<Timeline> {
               });
               Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
             },
-            child: Card(
-              child: ListTile(
-                title: Text(fileContent.values.elementAt(_index)), 
-                subtitle: Text(fileContent.keys.elementAt(_index).split(" ").elementAt(0)),
+            child: GestureDetector(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context, 
+                  builder: (BuildContext context) {
+                    return Text(
+                      fileContent.values.elementAt(_index),
+                      textAlign: TextAlign.center,
+                      textScaleFactor: 1.5,
+                    );
+                  }
+                );
+              },
+              child: Card(
+                child: ListTile(
+                  title: Text(fileContent.values.elementAt(_index)), 
+                  subtitle: Text(fileContent.keys.elementAt(_index).split(" ").elementAt(0)),
+                ),
               ),
-            ),
+            )
           );
          },
        ),

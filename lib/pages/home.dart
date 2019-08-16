@@ -51,7 +51,7 @@ class _HomeState extends State<Home> {
         title: Text("Home"),
       ),
       body: Container(
-        height: 155,
+        height: 154,
         padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
