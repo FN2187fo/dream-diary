@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
@@ -57,7 +57,7 @@ class _HomeState extends State<Home> {
           scrollDirection: Axis.horizontal,
           itemCount: _getItemCount(),
           itemBuilder: (context, index) {
-            if(index == 5 || index > fileContent.keys.length) {
+            if(index == 5 || index == _getItemCount() - 1 || fileContent.keys.length == 0) {
               return GestureDetector(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => Timeline()));
@@ -77,8 +77,8 @@ class _HomeState extends State<Home> {
                 width: 200,
                 child: Card(
                   child: ListTile(
-                    title: Text(fileContent.values.elementAt(fileContent.length.toInt() - index.toInt() - 1)), 
-                    subtitle: Text(fileContent.keys.elementAt(fileContent.length.toInt() - index.toInt() - 1).split(" ").elementAt(0)),
+                    title: Text(fileContent.values.elementAt(fileContent.length - index - 1)), 
+                    subtitle: Text(fileContent.keys.elementAt(fileContent.length - index - 1).split(" ").elementAt(0)),
                   ),
                 ),
               );
