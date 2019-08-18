@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -30,39 +31,35 @@ class _TimelineState extends State<Timeline> {
 
   void readFile() {
     this.setState(() => fileContent = jsonDecode(jsonFile.readAsStringSync()));
-    print(fileContent);
   }
 
   void deleteContent(index) {
     Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
-    print("Json decoded");
     jsonFileContent.remove(index);
-    print("Removed from fileContent");
     jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
-    print("Written to jsonFile");
     setState(() {
       fileContent = jsonDecode(jsonFile.readAsStringSync());
     });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Timeline"),
-      ),
-      body: ListView.builder(
+  _getContent() async{
+    print(fileContent.isNotEmpty);
+    if(fileContent.isNotEmpty)
+    {
+      return ListView.builder(
         itemCount: fileContent.values.length,
         itemBuilder: (context, index) {
-        return _getList(index);
-        },
-      ),
-
-    );
+          return _getListItem(index);
+        }
+      );
+    } else {
+      return Center(
+        child: Image.asset("assets/undraw_no_data_qbuo.png")
+      );
+    }
   }
-  
-  _getList(index) {
+
+  _getListItem(index) {
     int _index = fileContent.length.toInt() - index.toInt() - 1;
     return Dismissible(
       key: Key(fileContent.keys.elementAt(_index)),
@@ -96,5 +93,26 @@ class _TimelineState extends State<Timeline> {
         ),
       )
     ); 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Timeline"),
+      ),
+      body: Container(
+        child: FutureBuilder(
+          future: _getContent(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+            if(snapshot.hasData)
+              return snapshot.data;
+
+        return Container(child: CircularProgressIndicator());
+       }
+        ),
+      )
+    );
   }
 }

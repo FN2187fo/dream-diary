@@ -29,7 +29,6 @@ class _AddState extends State<Add> {
   }
 
   void createFile(Map<String, dynamic> content, Directory dir, String fileName) {
-    print("Creating file!");
     File file = new File(dir.path + "/" + fileName);
     file.createSync();
     fileExists = true;
@@ -37,20 +36,15 @@ class _AddState extends State<Add> {
   }
 
   void writeToFile(String key, dynamic value) {
-    print("Writing to file!");
     Map<String, dynamic> content = {key: value};
     if (fileExists) {
-      print("File exists");
       Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
-      print("json decoded");
       jsonFileContent.addAll(content);
       jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
     } else {
-      print("File does not exist!");
       createFile(content, dir, fileName);
     }
     this.setState(() => fileContent = jsonDecode(jsonFile.readAsStringSync()));
-    print(fileContent);
   }
 
   @override
