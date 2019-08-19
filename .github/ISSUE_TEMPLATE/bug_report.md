@@ -13,4 +13,6 @@ assignees: ''
 
 **Expected behavior**
 
+**Actual behavior**
+
 **Screenshots**
