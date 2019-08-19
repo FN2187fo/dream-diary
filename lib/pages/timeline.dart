@@ -109,8 +109,8 @@ class _TimelineState extends State<Timeline> {
             if(snapshot.hasData)
               return snapshot.data;
 
-        return Container(child: CircularProgressIndicator());
-       }
+            return Container(child: CircularProgressIndicator());
+          }
         ),
       )
     );
