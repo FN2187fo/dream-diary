@@ -99,7 +99,10 @@ class _HomeState extends State<Home> {
             if(snapshot.hasData)
               return snapshot.data;
 
-            return Center(child: CircularProgressIndicator());
+            return Center(
+              heightFactor: 4.5,
+              child: CircularProgressIndicator(),
+            );
           }
         ),
         ],

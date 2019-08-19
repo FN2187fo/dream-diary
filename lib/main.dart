@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage> {
         currentIndex: _currentIndex,
         onTap: (int index) {
           setState(() {
-            _currentIndex = index; 
+            _currentIndex = index;
           });
         },
         items: [
