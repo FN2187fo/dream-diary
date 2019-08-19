@@ -43,7 +43,6 @@ class _TimelineState extends State<Timeline> {
   }
 
   _getContent() async{
-    print(fileContent.isNotEmpty);
     if(fileContent.isNotEmpty)
     {
       return ListView.builder(
@@ -59,28 +58,60 @@ class _TimelineState extends State<Timeline> {
     }
   }
 
+  _deleteListItem(index) {
+    Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
+    jsonFileContent.remove(fileContent.keys.elementAt(index));
+    jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
+    setState(() {
+      fileContent = jsonDecode(jsonFile.readAsStringSync());
+    });
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
+  }
+
   _getListItem(index) {
     int _index = fileContent.length.toInt() - index.toInt() - 1;
+    String date = fileContent.keys.elementAt(_index).split(" ").elementAt(0);
+    String formatedDate = date.split("-").elementAt(2) + "." + date.split("-").elementAt(1)  + "." + date.split("-").elementAt(0);
     return Dismissible(
       key: Key(fileContent.keys.elementAt(_index)),
       onDismissed: (direction) {
-        Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
-        jsonFileContent.remove(fileContent.keys.elementAt(_index));
-        jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
-        setState(() {
-          fileContent = jsonDecode(jsonFile.readAsStringSync());
-        });
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
+        _deleteListItem(_index);
       },
       child: GestureDetector(
         onTap: () {
           showModalBottomSheet(
             context: context, 
             builder: (BuildContext context) {
-              return Text(
-                fileContent.values.elementAt(_index),
-                textAlign: TextAlign.center,
-                textScaleFactor: 1.5,
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  ButtonBar(
+                    children: <Widget>[
+                      ButtonTheme(
+                        minWidth: 20,
+                        child: FlatButton(
+                          child: Icon(Icons.edit),
+                          onPressed: () {},
+                        ),
+                      ),
+                      ButtonTheme(
+                        minWidth: 20,
+                        child: FlatButton(
+                          child: Icon(Icons.delete_outline, color: Colors.red,),
+                          onPressed: () {
+                            _deleteListItem(_index);
+                            Navigator.of(context).pop();
+                          },
+                          splashColor: Colors.red[200],
+                        ),
+                      ),
+                    ],
+                  ),
+                  ListTile(
+                    title: Text(fileContent.values.elementAt(_index),),
+                    subtitle: Text(formatedDate),
+                  )
+                ],
               );
             }
           );
@@ -88,7 +119,7 @@ class _TimelineState extends State<Timeline> {
         child: Card(
           child: ListTile(
             title: Text(fileContent.values.elementAt(_index)), 
-            subtitle: Text(fileContent.keys.elementAt(_index).split(" ").elementAt(0)),
+            subtitle: Text(formatedDate),
           ),
         ),
       )

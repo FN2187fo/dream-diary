@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
     }
   }
 
-  _getContent() async{
+  _getSmallTimeline() async{
     return Container(
       height: 154,
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
@@ -67,12 +67,14 @@ class _HomeState extends State<Home> {
               ),
             );
           } else {
+            String date = fileContent.keys.elementAt(fileContent.length - index - 1).split(" ").elementAt(0);
+            String formatedDate = date.split("-").elementAt(2) + "." + date.split("-").elementAt(1)  + "." + date.split("-").elementAt(0);  
             return Container(
               width: 200,
               child: Card(
                 child: ListTile(
                   title: Text(fileContent.values.elementAt(fileContent.length - index - 1)), 
-                  subtitle: Text(fileContent.keys.elementAt(fileContent.length - index - 1).split(" ").elementAt(0)),
+                  subtitle: Text(formatedDate),
                 ),
               ),
             );
@@ -92,12 +94,12 @@ class _HomeState extends State<Home> {
       body: ListView(
         children: <Widget>[
           FutureBuilder(
-          future: _getContent(),
+          future: _getSmallTimeline(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
             if(snapshot.hasData)
               return snapshot.data;
 
-            return Container(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }
         ),
         ],
