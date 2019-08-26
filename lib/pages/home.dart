@@ -25,7 +25,8 @@ class _HomeState extends State<Home> {
       jsonFile = new File(dir.path + "/" + fileName);
       fileExists = jsonFile.existsSync();
       if (fileExists) {
-        this.setState(() => fileContent = jsonDecode(jsonFile.readAsStringSync()));
+        this.setState(
+            () => fileContent = jsonDecode(jsonFile.readAsStringSync()));
       }
     });
   }
@@ -35,15 +36,15 @@ class _HomeState extends State<Home> {
     print(fileContent);
   }
 
-  _getItemCount(){
-    if(fileContent.values.length > 5) {
+  _getItemCount() {
+    if (fileContent.values.length > 5) {
       return 6;
     } else {
       return fileContent.values.length + 1;
     }
   }
 
-  _getSmallTimeline() async{
+  _getSmallTimeline() async {
     return Container(
       height: 154,
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
@@ -51,30 +52,34 @@ class _HomeState extends State<Home> {
         scrollDirection: Axis.horizontal,
         itemCount: _getItemCount(),
         itemBuilder: (context, index) {
-          if(index == 5 || index == _getItemCount() - 1 || fileContent.keys.length == 0) {
+          if (index == 5 ||
+              index == _getItemCount() - 1 ||
+              fileContent.keys.length == 0) {
             return GestureDetector(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Timeline()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Timeline()));
               },
               child: Container(
                 width: 150,
                 child: Card(
                   color: Theme.of(context).accentColor,
                   child: Center(
-                    child: Text("Show all", style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Show all",
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
                 ),
               ),
             );
           } else {
-            String date = fileContent.keys.elementAt(fileContent.length - index - 1).split(" ").elementAt(0);
-            String formatedDate = date.split("-").elementAt(2) + "." + date.split("-").elementAt(1)  + "." + date.split("-").elementAt(0);  
             return Container(
               width: 200,
               child: Card(
                 child: ListTile(
-                  title: Text(fileContent.values.elementAt(fileContent.length - index - 1)), 
-                  subtitle: Text(formatedDate),
+                  title: Text(fileContent.values
+                      .elementAt(fileContent.length - index - 1)),
                 ),
               ),
             );
@@ -94,25 +99,24 @@ class _HomeState extends State<Home> {
       body: ListView(
         children: <Widget>[
           FutureBuilder(
-          future: _getSmallTimeline(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
-            if(snapshot.hasData)
-              return snapshot.data;
+              future: _getSmallTimeline(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                if (snapshot.hasData) return snapshot.data;
 
-            return Center(
-              heightFactor: 4.5,
-              child: CircularProgressIndicator(),
-            );
-          }
-        ),
+                return Center(
+                  heightFactor: 4.5,
+                  child: CircularProgressIndicator(),
+                );
+              }),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => Add()));
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Add()));
         },
-          child: Icon(Icons.add),
-       ),
-     );
-   }
+        child: Icon(Icons.add),
+      ),
+    );
+  }
 }

@@ -12,10 +12,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.pink,
-        primaryColor: Colors.pink[800],
-        canvasColor: Colors.white
-      ),
+          primarySwatch: Colors.pink,
+          primaryColor: Colors.pink[800],
+          canvasColor: Colors.white,
+          brightness: Brightness.light),
       home: MyHomePage(),
     );
   }
@@ -28,11 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
-  List<Widget> _pages = [
-    Home(),
-    Timeline(),
-    You()
-  ];
+  List<Widget> _pages = [Home(), Timeline(), You()];
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +43,11 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.bubble_chart),
-            title: Text("Home")
-          ),
+              icon: Icon(Icons.bubble_chart), title: Text("Home")),
           BottomNavigationBarItem(
-            icon: Icon(Icons.timelapse),
-            title: Text("Timeline")
-          ),
+              icon: Icon(Icons.timelapse), title: Text("Timeline")),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            title: Text("You")
-          )
+              icon: Icon(Icons.person_outline), title: Text("You"))
         ],
       ),
     );
