@@ -16,38 +16,37 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.pink[800],
           canvasColor: Colors.white,
           brightness: Brightness.light),
-      home: MyHomePage(),
+      home: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          bottomNavigationBar: menu(context),
+          body: TabBarView(
+            children: [Home(), Timeline(), You()],
+          ),
+        ),
+      ),
     );
   }
-}
 
-class MyHomePage extends StatefulWidget {
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _currentIndex = 0;
-  List<Widget> _pages = [Home(), Timeline(), You()];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (int index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.bubble_chart), title: Text("Home")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.timelapse), title: Text("Timeline")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline), title: Text("You"))
+  Widget menu(BuildContext context) {
+    return Container(
+      color: Colors.pink,
+      child: TabBar(
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white70,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorPadding: EdgeInsets.all(5.0),
+        indicatorColor: Colors.white,
+        tabs: [
+          Tab(
+            text: "Home",
+          ),
+          Tab(
+            text: "Timeline",
+          ),
+          Tab(
+            text: "You",
+          ),
         ],
       ),
     );
