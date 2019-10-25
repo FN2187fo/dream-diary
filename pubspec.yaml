@@ -28,6 +28,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   path_provider:
+  flutter_local_notifications: ^0.8.4
 
 
 # For information on the generic Dart part of this file, see the
