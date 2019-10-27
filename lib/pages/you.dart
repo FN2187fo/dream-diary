@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'notifications.dart';
+import 'settings.dart';
 
 class You extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _YouState extends State<You> {
       ),
       body: ListView(
         children: <Widget>[
+          ListTile(title: Text("Settings", textAlign: TextAlign.center,), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Settings()));},),
           Divider(),
           ListTile(title: Text("Notifications", textAlign: TextAlign.center,), onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => Notifications()));}),
           Divider(),

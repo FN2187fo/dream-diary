@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'add.dart';
-import 'package:intl/intl.dart';
-import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:dream_diary/local_notifications_helper.dart';
 
 class Notifications extends StatefulWidget {
   @override
@@ -66,8 +63,4 @@ class _NotificationsState extends State<Notifications> {
       )
     );
   }
-
-  // _showDaily() async {
-  //   await notifications.showDailyAtTime(0, "title", "body", time, platformChannelSpecifics);
-  // }
 }

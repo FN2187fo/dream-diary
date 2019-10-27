@@ -2,22 +2,40 @@ import 'package:dream_diary/pages/home.dart';
 import 'package:dream_diary/pages/timeline.dart';
 import 'package:dream_diary/pages/you.dart';
 import 'package:flutter/material.dart';
+import 'package:dynamic_theme/dynamic_theme.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  
+  Brightness brightness;
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          primarySwatch: Colors.pink,
-          primaryColor: Colors.pink[800],
-          canvasColor: Colors.white,
-          brightness: Brightness.light),
-      home: MyHomePage(),
+    return DynamicTheme(
+      defaultBrightness: Brightness.light,
+      data: (brightness) => ThemeData(
+        primarySwatch: Colors.indigo,
+        brightness: brightness
+      ),
+      themedWidgetBuilder: (context, theme) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme,
+          home: MyHomePage(),
+        );
+      },
     );
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   title: 'Flutter Demo',
+    //   theme: ThemeData(
+    //       primarySwatch: Colors.pink,
+    //       primaryColor: Colors.teal[800],
+    //       canvasColor: Colors.black,
+    //       brightness: Brightness.dark),
+    //   home: MyHomePage(),
+    // );
   }
 }
 

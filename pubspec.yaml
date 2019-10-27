@@ -30,6 +30,7 @@ dev_dependencies:
   path_provider:
   flutter_local_notifications: ^0.8.4
   datetime_picker_formfield: 
+  dynamic_theme: ^1.0.1
 
 
 # For information on the generic Dart part of this file, see the
