@@ -26,16 +26,6 @@ class MyApp extends StatelessWidget {
         );
       },
     );
-    // return MaterialApp(
-    //   debugShowCheckedModeBanner: false,
-    //   title: 'Flutter Demo',
-    //   theme: ThemeData(
-    //       primarySwatch: Colors.pink,
-    //       primaryColor: Colors.teal[800],
-    //       canvasColor: Colors.black,
-    //       brightness: Brightness.dark),
-    //   home: MyHomePage(),
-    // );
   }
 }
 
