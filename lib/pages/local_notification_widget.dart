@@ -14,7 +14,7 @@ class _LocalNotificationWidgetState extends State<LocalNotificationWidget> {
   void initState() {
     super.initState();
 
-    final settingsAndroid = new AndroidInitializationSettings('bed');
+    final settingsAndroid = new AndroidInitializationSettings('ic_launcher');
     final settingsIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: (id, title, body, payload) => onSelectNotification(payload));
     notifications.initialize(InitializationSettings(settingsAndroid, settingsIOS,), onSelectNotification: onSelectNotification);
   }

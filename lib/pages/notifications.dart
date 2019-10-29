@@ -16,7 +16,7 @@ class _NotificationsState extends State<Notifications> {
   void initState() {
     super.initState();
 
-    final settingsAndroid = new AndroidInitializationSettings('bed');
+    final settingsAndroid = new AndroidInitializationSettings('dream_journal_shape');
     final settingsIOS = new IOSInitializationSettings(onDidReceiveLocalNotification: (id, title, body, payload) => onSelectNotification(payload));
     notifications.initialize(InitializationSettings(settingsAndroid, settingsIOS,), onSelectNotification: onSelectNotification);
   }
