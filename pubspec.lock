@@ -65,14 +65,14 @@ packages:
     source: hosted
     version: "0.1.2"
   datetime_picker_formfield:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: datetime_picker_formfield
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.8"
   dynamic_theme:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: dynamic_theme
       url: "https://pub.dartlang.org"
@@ -84,14 +84,14 @@ packages:
     source: sdk
     version: "0.0.0"
   flutter_launcher_icons:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_launcher_icons
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.7.4"
   flutter_local_notifications:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: flutter_local_notifications
       url: "https://pub.dartlang.org"
@@ -138,7 +138,7 @@ packages:
     source: hosted
     version: "1.6.4"
   path_provider:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
