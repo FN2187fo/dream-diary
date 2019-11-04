@@ -16,6 +16,7 @@ class _TimelineState extends State<Timeline> {
   bool fileExists = false;
   Map<String, dynamic> fileContent;
   TextEditingController _controller;
+  TextEditingController searchController;
 
   @override
   void initState() {
@@ -36,8 +37,7 @@ class _TimelineState extends State<Timeline> {
   }
 
   void deleteContent(index) {
-    Map<String, dynamic> jsonFileContent =
-        jsonDecode(jsonFile.readAsStringSync());
+    Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
     jsonFileContent.remove(index);
     jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
     setState(() {
@@ -47,8 +47,7 @@ class _TimelineState extends State<Timeline> {
 
   void writeToFile(String key, dynamic value) {
     Map<String, dynamic> content = {key: value};
-    Map<String, dynamic> jsonFileContent =
-        jsonDecode(jsonFile.readAsStringSync());
+    Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
     jsonFileContent.addAll(content);
     jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
 
@@ -56,161 +55,173 @@ class _TimelineState extends State<Timeline> {
   }
 
   _getContent() async {
-    if (fileContent.isNotEmpty) {
-      return ListView.builder(
-          itemCount: fileContent.values.length,
-          itemBuilder: (context, index) {
-            return _getListItem(index);
-          });
-    }
+    print("Getting content");
+    print("fileContent.length = " + fileContent.length.toString());
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: fileContent.length.toInt() + 1,
+        itemBuilder: (context, index) {
+          int _index = fileContent.length - index.toInt();
+          print(_index);
+          if (_index == fileContent.length) {
+            return TextField(
+              onChanged: (value) {
+                
+              },
+              controller: searchController,
+              decoration: InputDecoration(
+                hintText: "Search",
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(11)))
+              ),
+            );
+          } else if(_index >= 0) {
+            String date = fileContent.keys.elementAt(_index).split(" ").elementAt(0);
+            String formatedDate = date.split("-").elementAt(2) + "." + date.split("-").elementAt(1) + "." + date.split("-").elementAt(0);
+            _controller = TextEditingController(text: fileContent.values.elementAt(_index));
+            return Dismissible(
+              key: Key(fileContent.keys.elementAt(_index)),
+              onDismissed: (direction) {
+                _deleteListItem(_index);
+              },
+              child: GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            ButtonBar(
+                              children: <Widget>[
+                                ButtonTheme(
+                                  minWidth: 20,
+                                  child: FlatButton(
+                                    child: Icon(Icons.edit),
+                                    onPressed: () {
+                                      showModalBottomSheet(
+                                          context: context,
+                                          builder: (context) {
+                                            return Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: <Widget>[
+                                                ButtonBar(
+                                                  children: <Widget>[
+                                                    FlatButton(
+                                                      child: Icon(Icons.check),
+                                                      onPressed: () {
+                                                        writeToFile(
+                                                            fileContent.keys
+                                                                .elementAt(_index),
+                                                            _controller.text);
+                                                        Navigator.of(context).pop();
+                                                        Navigator.of(context).pop();
+                                                      },
+                                                    )
+                                                  ],
+                                                ),
+                                                ListTile(
+                                                  title: TextFormField(
+                                                    decoration: InputDecoration(
+                                                      hintText:
+                                                          "What did you dream about?",
+                                                    ),
+                                                    controller: _controller,
+                                                    keyboardType:
+                                                        TextInputType.multiline,
+                                                    textInputAction:
+                                                        TextInputAction.go,
+                                                    minLines: 10,
+                                                    maxLines: 50,
+                                                    onEditingComplete: () {
+                                                      writeToFile(
+                                                          fileContent.keys
+                                                              .elementAt(_index),
+                                                          _controller.text);
+                                                      Navigator.of(context).pop();
+                                                      Navigator.of(context).pop();
+                                                    },
+                                                  ),
+                                                )
+                                              ],
+                                            );
+                                          });
+                                    },
+                                  ),
+                                ),
+                                ButtonTheme(
+                                  minWidth: 20,
+                                  child: FlatButton(
+                                    child: Icon(
+                                      Icons.delete_outline,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () {
+                                      _deleteListItem(_index);
+                                      Navigator.of(context).pop();
+                                    },
+                                    splashColor: Colors.red[200],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            ListTile(
+                              title: Text(
+                                fileContent.values.elementAt(_index),
+                              ),
+                              subtitle: Text(formatedDate),
+                            )
+                          ],
+                        );
+                      });
+                },
+                child: Card(
+                  child: ListTile(
+                    title: Text(fileContent.values.elementAt(_index)),
+                    subtitle: Text(formatedDate),
+                  ),
+                ),
+              )
+            );
+          }
+        },
+      ),
+    );
   }
 
   _deleteListItem(index) {
-    Map<String, dynamic> jsonFileContent =
-        jsonDecode(jsonFile.readAsStringSync());
+    Map<String, dynamic> jsonFileContent = jsonDecode(jsonFile.readAsStringSync());
     jsonFileContent.remove(fileContent.keys.elementAt(index));
     jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
     setState(() {
       fileContent = jsonDecode(jsonFile.readAsStringSync());
     });
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text("Deleted entry"),
-    ));
-  }
-
-  _getListItem(index) {
-    int _index = fileContent.length.toInt() - index.toInt() - 1;
-    String date = fileContent.keys.elementAt(_index).split(" ").elementAt(0);
-    String formatedDate = date.split("-").elementAt(2) +
-        "." +
-        date.split("-").elementAt(1) +
-        "." +
-        date.split("-").elementAt(0);
-    _controller =
-        TextEditingController(text: fileContent.values.elementAt(_index));
-    return Dismissible(
-        key: Key(fileContent.keys.elementAt(_index)),
-        onDismissed: (direction) {
-          _deleteListItem(_index);
-        },
-        child: GestureDetector(
-          onTap: () {
-            showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      ButtonBar(
-                        children: <Widget>[
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              child: Icon(Icons.edit),
-                              onPressed: () {
-                                showModalBottomSheet(
-                                    context: context,
-                                    builder: (context) {
-                                      return Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          ButtonBar(
-                                            children: <Widget>[
-                                              FlatButton(
-                                                child: Icon(Icons.check),
-                                                onPressed: () {
-                                                  writeToFile(
-                                                      fileContent.keys
-                                                          .elementAt(_index),
-                                                      _controller.text);
-                                                  Navigator.of(context).pop();
-                                                  Navigator.of(context).pop();
-                                                },
-                                              )
-                                            ],
-                                          ),
-                                          ListTile(
-                                            title: TextFormField(
-                                              decoration: InputDecoration(
-                                                hintText:
-                                                    "What did you dream about?",
-                                              ),
-                                              controller: _controller,
-                                              keyboardType:
-                                                  TextInputType.multiline,
-                                              textInputAction:
-                                                  TextInputAction.go,
-                                              minLines: 10,
-                                              maxLines: 50,
-                                              onEditingComplete: () {
-                                                writeToFile(
-                                                    fileContent.keys
-                                                        .elementAt(_index),
-                                                    _controller.text);
-                                                Navigator.of(context).pop();
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    });
-                              },
-                            ),
-                          ),
-                          ButtonTheme(
-                            minWidth: 20,
-                            child: FlatButton(
-                              child: Icon(
-                                Icons.delete_outline,
-                                color: Colors.red,
-                              ),
-                              onPressed: () {
-                                _deleteListItem(_index);
-                                Navigator.of(context).pop();
-                              },
-                              splashColor: Colors.red[200],
-                            ),
-                          ),
-                        ],
-                      ),
-                      ListTile(
-                        title: Text(
-                          fileContent.values.elementAt(_index),
-                        ),
-                        subtitle: Text(formatedDate),
-                      )
-                    ],
-                  );
-                });
-          },
-          child: Card(
-            child: ListTile(
-              title: Text(fileContent.values.elementAt(_index)),
-              subtitle: Text(formatedDate),
-            ),
-          ),
-        ));
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Timeline"),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text("Timeline"),
+      ),
+      body: Container(
+        child: FutureBuilder(
+          future: _getContent(),
+          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data;
+            } else{
+              return Center(child: Image.asset("assets/undraw_no_data_qbuo.png"));
+            }
+          }
         ),
-        body: Container(
-          child: FutureBuilder(
-              future: _getContent(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.hasData) return snapshot.data;
-
-                return Center(
-                    child: Image.asset("assets/undraw_no_data_qbuo.png"));
-              }),
-        ));
+      )
+    );
   }
 }
