@@ -16,7 +16,12 @@ class _TimelineState extends State<Timeline> {
   bool fileExists = false;
   Map<String, dynamic> fileContent;
   TextEditingController _controller;
-  TextEditingController searchController;
+  final TextEditingController _filter = new TextEditingController(); 
+  String _searchText = "";  
+  List names = new List(); 
+  List filtered = new List(); 
+  Icon _searchIcon = new Icon(Icons.search);
+  Widget _appBarTitle = new Text('Timeline');
 
   @override
   void initState() {
@@ -61,23 +66,12 @@ class _TimelineState extends State<Timeline> {
       padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 24.0),
       child: ListView.builder(
         scrollDirection: Axis.vertical,
-        itemCount: fileContent.length.toInt() + 1,
+        itemCount: fileContent.length.toInt(),
         itemBuilder: (context, index) {
-          int _index = fileContent.length - index.toInt();
+          int _index = fileContent.length - index.toInt() -1;
+          names = fileContent.values.toList();
           print(_index);
-          if (_index == fileContent.length) {
-            return TextField(
-              onChanged: (value) {
-                
-              },
-              controller: searchController,
-              decoration: InputDecoration(
-                hintText: "Search",
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(11)))
-              ),
-            );
-          } else if(_index >= 0) {
+          if(_index >= 0) {
             String date = fileContent.keys.elementAt(_index).split(" ").elementAt(0);
             String formatedDate = date.split("-").elementAt(2) + "." + date.split("-").elementAt(1) + "." + date.split("-").elementAt(0);
             _controller = TextEditingController(text: fileContent.values.elementAt(_index));
@@ -203,13 +197,60 @@ class _TimelineState extends State<Timeline> {
     Scaffold.of(context).showSnackBar(SnackBar(content: Text("Deleted entry"),));
   }
 
+  _searchPressed() {
+    print("on serach pressed called");
+    setState(() {
+      if (this._searchIcon.icon == Icons.search){
+        this._searchIcon = Icon(Icons.close);
+        this._appBarTitle = TextField(
+          controller: _filter,
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.search),
+            hintText: "Search..."
+          ),
+        );
+      } else {
+        this._searchIcon = Icon(Icons.search);
+        this._appBarTitle = Text("Timeline");
+        filtered = names;
+        _filter.clear();
+      }
+    });
+  }
+
+  _buildBar(BuildContext context) {
+    return AppBar(
+      centerTitle: true,
+      title: _appBarTitle,
+      leading: IconButton(
+        icon: _searchIcon,
+        onPressed:() {
+          print("search pressed");
+          _searchPressed();
+        }
+      ),
+    );
+  }
+
+  TimelineState() {
+    _filter.addListener((){
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          filtered = names;
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Timeline"),
-      ),
+      appBar: _buildBar(context),
       body: Container(
         child: FutureBuilder(
           future: _getContent(),
