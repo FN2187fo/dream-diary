@@ -104,8 +104,8 @@ class _HomeState extends State<Home> {
                 if (snapshot.hasData) return snapshot.data;
 
                 return Center(
-                  heightFactor: 4.5,
-                  child: CircularProgressIndicator(),
+                  heightFactor: 5,
+                  child: Text("Your enteries will appear here"),
                 );
               }),
         ],

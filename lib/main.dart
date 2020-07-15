@@ -6,18 +6,20 @@ import 'package:dynamic_theme/dynamic_theme.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
-  
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   Brightness brightness;
 
   @override
   Widget build(BuildContext context) {
     return DynamicTheme(
       defaultBrightness: Brightness.light,
-      data: (brightness) => ThemeData(
-        primarySwatch: Colors.indigo,
-        brightness: brightness
-      ),
+      data: (brightness) =>
+          ThemeData(primarySwatch: Colors.indigo, brightness: brightness),
       themedWidgetBuilder: (context, theme) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
