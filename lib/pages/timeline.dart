@@ -15,6 +15,8 @@ class _TimelineState extends State<Timeline> {
   String fileName = "dreamDiary.json";
   bool fileExists = false;
   Map<String, dynamic> fileContent;
+  String binKey;
+  String binValue;
   TextEditingController _controller;
   TextEditingController _filter = new TextEditingController();
   String _searchText = "";
@@ -83,6 +85,8 @@ class _TimelineState extends State<Timeline> {
               return Dismissible(
                   key: Key(fileContent.keys.elementAt(_index)),
                   onDismissed: (direction) {
+                    binKey = fileContent.keys.elementAt(_index);
+                    binValue = fileContent.values.elementAt(_index);
                     _deleteListItem(_index);
                   },
                   child: GestureDetector(
@@ -215,6 +219,11 @@ class _TimelineState extends State<Timeline> {
     });
     Scaffold.of(context).showSnackBar(SnackBar(
       content: Text("Deleted entry"),
+      action: SnackBarAction(
+          label: "Undo",
+          onPressed: () {
+            writeToFile(binKey, binValue);
+          }),
     ));
   }
 
